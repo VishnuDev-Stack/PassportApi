@@ -83,6 +83,7 @@ config/auth.php
 
 php.ini extenstion:sodium needed.
 composer require laravel/passport
+php artisan vendor:publish --tag=passport-migrations
 
 php artisan passport:keys
 
@@ -94,3 +95,6 @@ public function boot(): void
 }
 
 php artisan vendor:publish --tag=passport-config
+
+use Laravel\Passport\PersonalAccessTokenResult;
+use Auth;

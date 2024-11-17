@@ -10,6 +10,8 @@ use Validator;
 use App\Traits\ResponseTraits;
 use Hash;
 use Carbon;
+use Laravel\Passport\PersonalAccessTokenResult;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -36,5 +38,22 @@ class AuthController extends Controller
            /// throw $th;
             return $this->error();
         }
+    }
+
+    public function Login(Request $request) {
+        $validator = Validator::make($request->all(),[
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response($validator->messages(), 400);
+        }
+
+        if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            return $this->autherror();
+        }
+        \Log::info("hai");
+        return $this->createToken();
+
     }
 }
